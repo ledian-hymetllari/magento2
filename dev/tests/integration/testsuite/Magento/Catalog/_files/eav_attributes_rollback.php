@@ -13,8 +13,12 @@ $installer = $objectManager->create(\Magento\Catalog\Setup\CategorySetup::class)
 $eavRepository = $objectManager->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
 
 try {
-    $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'test_attribute');
-    $eavRepository->delete($attribute);
+
+    $attribute1 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'color_custom');
+    $attribute2 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'is_featured_custom');
+    var_dump("LINE 2000");
+    $eavRepository->delete($attribute1);
+    $eavRepository->delete($attribute2);
 } catch (\Exception $ex) {
     //Nothing to remove
 }

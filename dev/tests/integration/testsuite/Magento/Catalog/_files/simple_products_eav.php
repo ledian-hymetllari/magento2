@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/CatalogRule/_files/attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/eav_attributes.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -36,7 +36,11 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ]);
 $productRepository->save($product);
 $productAction = $objectManager->get(\Magento\Catalog\Model\Product\Action::class);
-$productAction->updateAttributes([$product->getId()], ['test_attribute' => 'test_attribute_value'], $store->getId());
+$productAction->updateAttributes([$product->getId()],
+    [
+        'text_attribute' => 'red'
+    ],
+    $store->getId());
 
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId('simple')
