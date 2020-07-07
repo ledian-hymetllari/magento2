@@ -5,8 +5,13 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/eav_attributes.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -17,7 +22,14 @@ $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryI
 
 $installer = $objectManager->get(\Magento\Catalog\Setup\CategorySetup::class);
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+$multiselectAttribute = $eavConfig->getAttribute(Product::ENTITY, 'multiselect_attribute');
 
+
+$multiselectOptionsIds = $objectManager->create(Collection::class)
+    ->setAttributeFilter($multiselectAttribute->getId())
+    ->getAllIds();
+
+var_dump($multiselectOptionsIds);
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId('simple')
     ->setId(1)
@@ -26,6 +38,11 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setName('Simple Product 1')
     ->setSku('simple1')
     ->setPrice(10)
+    ->setMultiselectAttribute($multiselectOptionsIds[0])
+    ->setTextAttribute('text Attribute test')
+    ->setTextAreaAttribute('text Area Attribute test')
+    ->setBooleanAttribute(1)
+    ->setTextEditorAttribute('text Editor Attribute test')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData([
@@ -36,11 +53,11 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ]);
 $productRepository->save($product);
 $productAction = $objectManager->get(\Magento\Catalog\Model\Product\Action::class);
-$productAction->updateAttributes([$product->getId()],
-    [
-        'text_attribute' => 'red'
-    ],
-    $store->getId());
+//$productAction->updateAttributes([$product->getId()],
+//    [
+//        'text_attribute' => 'red'
+//    ],
+//    $store->getId());
 
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId('simple')

@@ -14,11 +14,17 @@ $eavRepository = $objectManager->get(\Magento\Eav\Api\AttributeRepositoryInterfa
 
 try {
 
-    $attribute1 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'color_custom');
-    $attribute2 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'is_featured_custom');
+    $attribute1 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'text_attribute');
+    $attribute2 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'multiselect_attribute');
+    $attribute3 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'text_area_attribute');
+    $attribute4 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'text_editor_attribute');
+    $attribute5 = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'boolean_attribute');
     var_dump("LINE 2000");
     $eavRepository->delete($attribute1);
     $eavRepository->delete($attribute2);
+    $eavRepository->delete($attribute3);
+    $eavRepository->delete($attribute4);
+    $eavRepository->delete($attribute5);
 } catch (\Exception $ex) {
     //Nothing to remove
 }
